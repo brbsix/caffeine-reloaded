@@ -154,10 +154,11 @@ def get_base_path():
     path = abspath(dirname(__file__))
 
     while path != '/':
-        path = abspath(join(path, pardir))
-
         if exists(join(path, 'share', __program__)):
             return path
+
+        path = abspath(join(path, pardir))
+
 
     raise Exception('Unable to determine BASE_PATH')
 
