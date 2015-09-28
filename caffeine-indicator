@@ -67,7 +67,7 @@ class Caffeine(GObject.GObject):
         if self.activated:
             self.activated = False
             if OPTIONS.auto_toggle:
-                # use SIGTERM so that caffeine will resume screensaver before exit
+                # use SIGTERM to ensure screensaver will resume before exit
                 self.process.terminate()
 
                 try:
