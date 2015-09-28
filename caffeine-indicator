@@ -39,6 +39,7 @@ __version__ = pkg_resources.require('caffeine')[0].version
 
 
 class Caffeine(GObject.GObject):
+
     def __init__(self):
         GObject.GObject.__init__(self)
 
@@ -92,6 +93,7 @@ class Caffeine(GObject.GObject):
 
 
 class GUI(object):
+
     def __init__(self, caffeine):
         self.caffeine = caffeine
         self.caffeine.connect('activation-toggled', self.on_activation_toggled)

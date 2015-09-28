@@ -36,6 +36,7 @@ __version__ = pkg_resources.require(__program__)[0].version
 
 
 class Caffeine(GObject.GObject):
+
     def __init__(self):
         GObject.GObject.__init__(self)
 
