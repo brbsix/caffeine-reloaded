@@ -1,10 +1,9 @@
 About
 =====
 
-**caffeine-reloaded** is an almost complete rewrite of the caffeine
-project found at http://launchpad.net/caffeine/. It was created in
-an effort to tidy up the code, increase stability, and add additional
-features.
+**caffeine-reloaded** is an almost complete rewrite of lp:caffeine_
+It was created in an effort to tidy up the code, increase stability,
+and add additional features.
 
 The prime directive is to prevent the screen saver from activating
 when desired. This can be achieved automatically (detecting when the
@@ -83,3 +82,5 @@ terms of the GNU Lesser General Public License, either version 3, or (at
 your option) any later version. See COPYING.LESSER.
 
 caffeine-reloaded uses pyewmh from http://sf.net/projects/pyewmh
+
+.. _lp:caffeine: http://launchpad.net/caffeine
