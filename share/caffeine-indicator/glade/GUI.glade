@@ -8,9 +8,9 @@
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">normal</property>
     <property name="program_name">Caffeine Indicator</property>
-    <property name="copyright">Copyright &#169; 2009&#8211;2014 Brad Smith, Tommy Brunn, Isaiah Heyer &amp; Reuben Thomas</property>
+    <property name="copyright">Copyright &#169; 2009&#8211;2015 Brad Smith, Tommy Brunn, Isaiah Heyer, Reuben Thomas &amp; Brian Beffa</property>
     <property name="comments" translatable="yes">Manually control the desktop&#8217;s idle state</property>
-    <property name="website">http://launchpad.net/caffeine</property>
+    <property name="website">https://github.com/brbsix/caffeine</property>
     <property name="license">This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
@@ -19,7 +19,8 @@ You should have received a copy of the GNU General Public License along with thi
     <property name="authors">Brad Smith http://launchpad.net/~bnsmith
 Tommy Brunn http://launchpad.net/~reklamnevon
 Isaiah Heyer http://launchpad.net/~freshapplepy
-Reuben Thomas http://launchpad.net/~rrt</property>
+Reuben Thomas http://launchpad.net/~rrt
+Brian Beffa http://github.com/brbsix</property>
     <property name="translator_credits">Joan Rodr&#237;guez
 Ahmed Mohammed
 thunk

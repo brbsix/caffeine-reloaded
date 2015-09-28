@@ -6,6 +6,6 @@ Exec=/usr/bin/caffeine-indicator
 Terminal=false
 Type=Application
 Categories=Utility;TrayIcon;
-Keywords=Screensaver,Power,Saving,Blank
+Keywords=Blank;Power;Saving;Screensaver;
 OnlyShowIn=GNOME;Unity;
 StartupNotify=false

@@ -1,33 +1,39 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
 
-import os
+
 import sys
-import subprocess
+from os import makedirs, walk
+from os.path import join
+from subprocess import check_call
+
 
 if len(sys.argv) < 3:
-    print("usage: " + sys.argv[0] + " <program-name> <po directory>")
-    sys.exit(1)
+    print('Usage: %s <program-name> <po directory>' % sys.argv[0])
+    sys.exit(0)
 
-po_dir = sys.argv[-1]
-prg_name = sys.argv[-2]
+PO_DIR = sys.argv[-1]
+PROGRAM = sys.argv[-2]
 
-po_files = []
-for dirpath, dirnames, filenames in os.walk(po_dir):
-    for file in filenames:
-        if file.split('.')[-1] == "po":
-            po_files.append(os.path.join(dirpath, file))
+# PO_FILES = []
+# for dirpath, dirnames, filenames in walk(PO_DIR):
+#     for filename in filenames:
+#         if filename.split('.')[-1] == 'po':
+#             PO_FILES.append(join(dirpath, filename))
 
-for po in po_files:
+PO_FILES = [join(p, f) for p, d, files in walk(PO_DIR) \
+            for f in files if f.split('.')[-1] == 'po']
+
+for po in PO_FILES:
     lang = po.split('/')[-1]
-    print("Compiling for Locale: "+"".join(lang.split(".")[:-1]))
+    print('Compiling for Locale: ' + ''.join(lang.split('.')[:-1]))
     lang = lang.split('-')[-1]
     lang = lang.split('.')[0]
     lang = lang.strip()
     if not lang:
         continue
 
-    lang_lc_dir = os.path.join('share', 'locale', lang, 'LC_MESSAGES')
-    if not os.path.isdir(lang_lc_dir):
-        os.makedirs(lang_lc_dir)
-    
-    subprocess.check_call(["msgfmt", po, "-o", os.path.join(lang_lc_dir,prg_name+".mo")])
+    lang_lc_dir = join('share', 'locale', lang, 'LC_MESSAGES')
+    makedirs(lang_lc_dir, exist_ok=True)
+
+    check_call(['msgfmt', po, '-o', join(lang_lc_dir, PROGRAM + '.mo')])

@@ -1,44 +1,62 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
+
 
 from distutils.core import setup
-import os
-from os.path import join, abspath, dirname, exists
-import shutil
-import subprocess
+from os import makedirs, walk
+from os.path import abspath, dirname, join, relpath
+from shutil import copy
+from subprocess import check_call
 
-ROOT_DIR = dirname(abspath(__file__))
-SHARE_PATH = join(ROOT_DIR, "share")
+
+def read(path):
+    with open(path) as f:
+        return f.read().strip()
+
+
+# update the translations
 PO_DIR = 'translations'
-VERSION = open(join(ROOT_DIR, "VERSION")).read().strip()
-
-# Update the translations
-subprocess.check_call(["xgettext", "-o", join(PO_DIR, "caffeine-indicator.pot"), "--language=python", "--from-code=UTF-8", "caffeine-indicator"])
-subprocess.check_call(["./compile_translations.py", "caffeine-indicator", PO_DIR])
+check_call(['xgettext', '-o', join(PO_DIR, 'caffeine-indicator.pot'), '--from-code=UTF-8', '--language=python', 'caffeine-indicator'])
+check_call(['./compile_translations.py', 'caffeine-indicator', PO_DIR])
 
 # don't trash the system icons!
-blacklist = ['index.theme']
+BLACKLIST = ['index.theme']
 
-data_files = []
-for path, dirs, files in os.walk(SHARE_PATH):
-    data_files.append(tuple((path.replace(SHARE_PATH,"share", 1),
-        [join(path, file) for file in files if file not in blacklist])))
+# generate list of data files to include
+ROOT_DIR = dirname(abspath(__file__))
+SHARE_DIR = join(ROOT_DIR, 'share')
 
-desktop_name = "caffeine.desktop"
-desktop_file = join("share", "applications", desktop_name)
-autostart_dir = join("etc", "xdg", "autostart")
-if not exists(autostart_dir):
-    os.makedirs(autostart_dir)
-shutil.copy(desktop_file, autostart_dir)
-data_files.append(tuple(("/" + autostart_dir, [join(autostart_dir, desktop_name)])))
+# DATA_FILES = []
+# for path, dirs, files in walk(SHARE_DIR):
+#     DATA_FILES.append((relpath(path, ROOT_DIR),
+#                        [join(path, f) for f in files if f not in BLACKLIST]))
 
-setup(name="caffeine",
-    version=VERSION,
-    description="Stop the desktop from becoming idle in full-screen mode.",
-    license="GPLv3",
-    author="The Caffeine Developers",
-    author_email="rrt@sc3d.org",
-    url="https://launchpad.net/caffeine",
-    py_modules=["ewmh"],
-    data_files=data_files,
-    scripts=["caffeine", "caffeinate", "caffeine-indicator", "caffeine-screensaver", "caffeine-screensaver-freedesktop-helper"]
-    )
+DATA_FILES = [(relpath(p, ROOT_DIR), [join(p, f) for f in files if f not in BLACKLIST]) for p, d, files in walk(SHARE_DIR)]
+
+# prepare caffeine-indicator.desktop for install to etc/xdg/autostart
+DESKTOP_NAME = 'caffeine-indicator.desktop'
+DESKTOP_FILE = join('share', 'applications', DESKTOP_NAME)
+AUTOSTART_DIR = join('etc', 'xdg', 'autostart')
+makedirs(AUTOSTART_DIR, exist_ok=True)
+copy(DESKTOP_FILE, AUTOSTART_DIR)
+DATA_FILES.append((('/' + AUTOSTART_DIR, [join(AUTOSTART_DIR, DESKTOP_NAME)])))
+
+setup(
+    name='caffeine-reloaded',
+    version=read('VERSION'),
+    description='Stop the desktop from becoming idle in full-screen mode.',
+    author='Brian Beffa',
+    author_email='brbsix@gmail.com',
+    url='https://github.com/brbsix/caffeine-reloaded',
+    license='GPLv3',
+    py_modules=['ewmh'],
+    install_requires=['python3-xlib'],
+    data_files=DATA_FILES,
+    scripts=[
+        'caffeine',
+        'caffeinate',
+        'caffeine-indicator',
+        'caffeine-screensaver',
+        'caffeine-screensaver-freedesktop-helper'
+        ]
+)

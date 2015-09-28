@@ -1,80 +1,136 @@
-#!/usr/bin/env python3
-#
-# Copyright © 2009-2014 The Caffeine Developers
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
 
-import logging
+"""
+Copyright © 2009-2014 The Caffeine Developers
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+"""
+
+
 import argparse
+import logging
+import pkg_resources
 import signal
-from subprocess import call
 import sys
 
-import pkg_resources
+from ewmh import EWMH as EWMH_CLASS
 from gi.repository import GObject, Gtk, GLib
+from subprocess import call
+from Xlib.display import Display
 
-from ewmh import EWMH
+__program__ = 'caffeine'
+__description__ = 'Prevent desktop idleness in fullscreen mode.'
+__version__ = pkg_resources.require(__program__)[0].version
 
-PROGRAM_NAME = 'caffeine'
-
-# Handle command-line arguments
-parser = argparse.ArgumentParser(prog=PROGRAM_NAME, description='Prevent desktop idleness in full-screen mode')
-parser.add_argument('-V', '--version', action='version', version=PROGRAM_NAME + ' ' + pkg_resources.require(PROGRAM_NAME)[0].version)
-parser.parse_args()
-
-ewmh = EWMH()
 
 class Caffeine(GObject.GObject):
     def __init__(self):
         GObject.GObject.__init__(self)
-        self.screenSaverWindowID = None
+        self.windowID = None
 
-        # Add hook for full-screen check (same interval as mplayer's heartbeat command)
-        # FIXME: add capability to xdg-screensaver to report timeout
-        GObject.timeout_add(30000, self._check_for_fullscreen)
+        GObject.timeout_add(get_timeout(), self._check_for_fullscreen)
 
     def _check_for_fullscreen(self):
-        win = ewmh.getActiveWindow()
+        """Check for an active fullscreen window and respond appropriately."""
+        win = EWMH.getActiveWindow()
+        windowID = hex(win.id)
+
         inhibit = False
-        if win != None:
+        if win is not None:
             try:
-                inhibit = '_NET_WM_STATE_FULLSCREEN' in ewmh.getWmState(win, str=True)
+                inhibit = '_NET_WM_STATE_FULLSCREEN' in EWMH.getWmState(win, str=True)
             except:
                 pass
 
-        # If inhibition state has changed, take action
-        if (self.screenSaverWindowID != None) != inhibit:
+        # if inhibition state has changed, take action
+        if (self.windowID is not None) != inhibit:
             if inhibit:
-                self.screenSaverWindowID = hex(win.id)
-                call(['caffeine-screensaver', 'suspend', self.screenSaverWindowID])
-                logging.info(PROGRAM_NAME + " is inhibiting desktop idleness")
+                self.windowID = windowID
+                call(['caffeine-screensaver', 'suspend', self.windowID], timeout=5)
+                LOGGER.info('inhibiting desktop idleness')
             else:
                 self.release()
+        # if windowID has changed but inhibition state remains True, inhibit new windowID
+        elif windowID != self.windowID and inhibit:
+            self.windowID = windowID
+            call(['caffeine-screensaver', 'suspend', self.windowID], timeout=5)
 
-        # Return True so timeout is rerun
+        # return True so timeout is rerun
         return True
 
     def release(self):
-        if self.screenSaverWindowID != None:
-            call(['caffeine-screensaver', 'resume', self.screenSaverWindowID])
-            self.screenSaverWindowID = None
-            logging.info(PROGRAM_NAME + " is no longer inhibiting desktop idleness")
+        """Resume the screensaver and DPMS after being suspended."""
+        if self.windowID is not None:
+            call(['caffeine-screensaver', 'resume', self.windowID], timeout=5)
+            LOGGER.info('no longer inhibiting desktop idleness')
+            self.windowID = None
 
-# Adapted from http://stackoverflow.com/questions/26388088/python-gtk-signal-handler-not-working
-def InitSignal():
-    def signal_action(signal):
-        caffeine.release()
+
+# class Caffeine(GObject.GObject):
+#     def __init__(self):
+#         GObject.GObject.__init__(self)
+#         self.windowID = None
+
+#         GObject.timeout_add(get_timeout(), self._check_for_fullscreen)
+
+#     def _check_for_fullscreen(self):
+#         """Check for an active fullscreen window and respond appropriately."""
+#         win = EWMH.getActiveWindow()
+#         windowID = hex(win.id)
+
+#         inhibit = False
+#         if win is not None:
+#             try:
+#                 inhibit = '_NET_WM_STATE_FULLSCREEN' in EWMH.getWmState(win, str=True)
+#             except:
+#                 pass
+
+#         # if inhibition state has changed, take action
+#         if windowID != self.windowID or (self.windowID is not None) != inhibit:
+#             if inhibit:
+#                 self.windowID = hex(win.id)
+#                 call(['caffeine-screensaver', 'suspend', self.windowID], timeout=5)
+#                 LOGGER.info('inhibiting desktop idleness')
+#             else:
+#                 self.release()
+
+#         # return True so timeout is rerun
+#         return True
+
+#     def release(self):
+#         """Resume the screensaver and DPMS after being suspended."""
+#         if self.windowID is not None:
+#             call(['caffeine-screensaver', 'resume', self.windowID], timeout=5)
+#             LOGGER.info('no longer inhibiting desktop idleness')
+#             self.windowID = None
+
+
+def get_timeout():
+    """Determine the program's timeout interval in milliseconds."""
+
+    # seconds = Display().get_screen_saver().interval
+    seconds = Display().get_screen_saver().timeout
+
+    # default to 30s if screensaver is off otherwise use t minus 10s
+    return (seconds - 10) * 1000 if seconds > 10 else 60000
+
+
+# adapted from http://stackoverflow.com/questions/26388088/python-gtk-signal-handler-not-working
+def init_signal():
+    def signal_action(sig):
+        CAFFEINE.release()
         sys.exit(1)
 
     def idle_handler(*args):
@@ -92,9 +148,65 @@ def InitSignal():
         GLib.idle_add(install_glib_handler, sig, priority=GLib.PRIORITY_HIGH)
 
 
-# Set up and run
-logging.basicConfig(level=logging.INFO)
+PARSER = argparse.ArgumentParser(
+    add_help=False,
+    description=__description__,
+    prog=__program__,
+    usage='%(prog)s')
+PARSER.add_argument(
+    '--align',
+    action='store_true',
+    dest='align',
+    help=argparse.SUPPRESS)
+PARSER.add_argument(
+    '-h', '--help',
+    action='help',
+    help=argparse.SUPPRESS)
+PARSER.add_argument(
+    '-q', '--quiet',
+    action='store_true',
+    dest='quiet',
+    help='silence normal output')
+PARSER.add_argument(
+    '-t', '--timestamp',
+    action='store_true',
+    dest='timestamp',
+    help='timestamp log entries')
+PARSER.add_argument(
+    '-V', '--version',
+    action='version',
+    version=__program__ + ' ' + __version__)
+
+OPTIONS = PARSER.parse_args()
+
+# set up logging
+SPACES = ' ' * (11 if OPTIONS.align else 1)
+STR = '(%(name)s)' + SPACES + '%(levelname)s: %(message)s'
+
+if OPTIONS.timestamp:
+    FMT = ['%(asctime)s.%(msecs)03d ' + STR, '%Y-%m-%d %H:%M:%S']
+else:
+    FMT = [STR]
+
+LOGGER = logging.getLogger(__program__)
+STREAM = logging.StreamHandler()
+FORMAT = logging.Formatter(*FMT)
+STREAM.setFormatter(FORMAT)
+LOGGER.addHandler(STREAM)
+
+if not OPTIONS.quiet:
+    LOGGER.setLevel(logging.INFO)
+
+# # set up logging
+# LOGGER = logging.getLogger(__program__)
+# STREAM = logging.StreamHandler()
+# FORMAT = logging.Formatter('%(levelname)s:%(name)s: %(message)s')
+# STREAM.setFormatter(FORMAT)
+# LOGGER.addHandler(STREAM)
+# LOGGER.setLevel(logging.WARNING if OPTIONS.quiet else logging.INFO)
+
+EWMH = EWMH_CLASS()
 GObject.threads_init()
-caffeine = Caffeine()
-InitSignal()
+CAFFEINE = Caffeine()
+init_signal()
 Gtk.main()

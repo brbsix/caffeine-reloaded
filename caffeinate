@@ -2,23 +2,27 @@
 # (c) Reuben Thomas   4th January 2015
 # Released under the GPL version 3, or (at your option) any later version.
 
-if [ $# -lt 1 ]; then
-cat <<EOF
-Usage: caffeinate COMMAND [ARGUMENT...]
 
-Inhibit desktop idleness for the duration of COMMAND
-EOF
-exit 1
-fi
-
-die () {
-    echo $1
+die(){
+    echo "ERROR:${0##*/}: $1" >&2
     exit 1
 }
 
-wid=`xwininfo -root|grep "Window id:" | cut -d " " -f 4`
-if [ "$wid" != "" ]; then
-  caffeine-screensaver suspend "$wid" || die "could not inhibit desktop idleness"
-  "$@"
-  caffeine-screensaver resume "$wid" || die "could not uninhibit desktop idleness"
+
+if [ $# -lt 1 ] || ([ $# -eq 1 ] && ([ "$1" = '-h' ] || [ "$1" = '--help' ])); then
+    cat <<-EOF
+	Usage: ${0##*/} COMMAND [ARGUMENT...]
+
+	Inhibit desktop idleness for the duration of COMMAND
+	EOF
+    exit 0
+fi
+
+wid=$(xwininfo -root | awk '/Window id:/ {print $4}')
+if [ -n "$wid" ]; then
+    caffeine-screensaver suspend "$wid" || die "failed to inhibit desktop idleness"
+    "$@"
+    ec=$?
+    caffeine-screensaver resume "$wid" || die "failed to uninhibit desktop idleness"
+    exit "$ec"
 fi

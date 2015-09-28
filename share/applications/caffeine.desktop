@@ -25,5 +25,5 @@ Exec=/usr/bin/caffeine
 Terminal=false
 Type=Application
 Categories=Utility;
-Keywords=Screensaver,Power,Saving,Blank
+Keywords=Blank;Power;Saving;Screensaver;
 StartupNotify=false
