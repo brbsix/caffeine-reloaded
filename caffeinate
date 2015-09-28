@@ -18,11 +18,11 @@ if [ $# -eq 0 ] || ([ $# -eq 1 ] && ([ "$1" = '-h' ] || [ "$1" = '--help' ])); t
     exit 0
 fi
 
-wid=$(xwininfo -root | awk '/Window id:/ {print $4}')
+wid=$(xwininfo -root 2>/dev/null | awk '/^xwininfo: Window id:/ {print $4}')
 if [ -n "$wid" ]; then
-    caffeine-screensaver suspend "$wid" || die "failed to inhibit desktop idleness"
+    caffeine-screensaver suspend "$wid" || die 'failed to inhibit desktop idleness'
     "$@"
     ec=$?
-    caffeine-screensaver resume "$wid" || die "failed to uninhibit desktop idleness"
+    caffeine-screensaver resume "$wid" || die 'failed to uninhibit desktop idleness'
     exit "$ec"
 fi
