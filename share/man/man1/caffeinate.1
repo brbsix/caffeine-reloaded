@@ -1,0 +1,23 @@
+.TH CAFFEINATE "1" "April 2015"
+.SH NAME
+caffeinate \- inhibit desktop idleness for the duration of a command
+.SH SYNOPSIS
+.B caffeinate
+COMMAND [ARGUMENT...]
+.SH DESCRIPTION
+\fBcaffeinate\fR inhibits desktop idleness for the duration of a command, preventing
+screensavers or power-saving measures from activating, even if the machine is
+not being used.
+.PP
+It is usually more convenient to use the fully-automatic \fBcaffeine\fR(1).
+\fBcaffeinate\fR may be useful when it is impractical or impossible to run a
+program in full-screen mode, or to prevent automatic suspend kicking in
+during a long-running unattended command, such as a system update.
+.SH "SEE ALSO"
+.PP
+\fBcaffeine\fR(1),
+\fBcaffeine-indicator\fR(1)
+.SH AUTHORS
+Created by Reuben Thomas <rrt@sc3d.org>.
+.PP
+Forked by Six <brbsix@gmail.com>.

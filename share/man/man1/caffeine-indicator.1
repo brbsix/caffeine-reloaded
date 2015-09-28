@@ -1,0 +1,37 @@
+.TH CAFFEINE-INDICATOR "1" "April 2015" "version 2.8.3"
+.SH NAME
+caffeine\-indicator \- toggle desktop idleness inhibition
+.SH SYNOPSIS
+.B caffeine\-indicator
+[\fIOPTION\fR]...
+.SH DESCRIPTION
+\fBcaffeine-indicator\fR allows the user to prevent the desktop becoming idle,
+stopping screensavers or power-saving from activating.
+.PP
+Under normal operation, \fBcaffeine-indicator\fR permits manual inhibition of
+desktop idleness with a toggle. It also allows the user to toggle the fully-automatic
+\fBcaffeine\fR(1) from a desktop indicator via the \fB--auto\fR option.
+.SH OPTIONS
+.TP
+.BR \-a ", " \-\^\-auto
+Prevent desktop idleness in fullscreen mode
+.TP
+.BR \-q ", " \-\^\-quiet
+Suppress normal output
+.TP
+.BR \-t ", " \-\^\-timestamp
+Timestamp log entries
+.TP
+.BR \-h ", " \-\^\-help
+Show help and exit
+.TP
+.BR \-V ", " \-\^\-version
+Show program's version number and exit
+.SH "SEE ALSO"
+.PP
+\fBcaffeine\fR(1),
+\fBcaffeinate\fR(1)
+.SH AUTHORS
+Created by Reuben Thomas <rrt@sc3d.org>.
+.PP
+Forked by Six <brbsix@gmail.com>.

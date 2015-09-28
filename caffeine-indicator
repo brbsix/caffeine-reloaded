@@ -20,7 +20,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 import argparse
-# import builtins
 import gettext
 import locale
 import logging
@@ -42,16 +41,15 @@ __version__ = pkg_resources.require('caffeine')[0].version
 class Caffeine(GObject.GObject):
     def __init__(self):
         GObject.GObject.__init__(self)
-        self.process = None
-        self.root = Display().screen().root
-        self.status_string = None
-        self.window = None
 
-    @property
-    def get_activated(self):
-        return self.window is not None
+        self.activated = False
+        self.process = None
+        self.root_id = hex(DISPLAY.screen().root.id)
+        self.status_string = None
 
     def inhibit(self):
+        self.activated = True
+
         if OPTIONS.auto_toggle:
             args = ['caffeine'] + (
                 ['--quiet'] if OPTIONS.quiet else ['--align'] +
@@ -59,40 +57,38 @@ class Caffeine(GObject.GObject):
             self.process = Popen(args)
             self.status_string = _('started caffeine [%s]' % self.process.pid)
         else:
-            call(['caffeine-screensaver', 'suspend', self.window], timeout=5)
+            call(['caffeine-screensaver', 'suspend', self.root_id])
             self.status_string = _('inhibiting desktop idleness')
 
-    def release(self):
-        if self.get_activated:
-            self.resume()
-            self.window = None
-            LOGGER.info(self.status_string)
+        LOGGER.info(self.status_string)
 
     def resume(self):
-        if OPTIONS.auto_toggle:
-            # use SIGTERM so that caffeine will resume screensaver before exit
-            self.process.terminate()
+        if self.activated:
+            self.activated = False
+            if OPTIONS.auto_toggle:
+                # use SIGTERM so that caffeine will resume screensaver before exit
+                self.process.terminate()
 
-            try:
-                # ensure caffeine has terminated before continuing
-                self.process.wait(timeout=5)
-            except TimeoutExpired:
-                LOGGER.error('timed out attempting to terminate caffeine [%s]', self.process.pid)
+                try:
+                    # ensure caffeine has terminated before continuing
+                    self.process.wait(timeout=5)
+                except TimeoutExpired:
+                    LOGGER.error('timed out attempting to terminate caffeine [%s]', self.process.pid)
 
-            self.status_string = _('stopped caffeine [%s]' % self.process.pid)
-        else:
-            call(['caffeine-screensaver', 'resume', self.window], timeout=5)
-            self.status_string = _('no longer inhibiting desktop idleness')
+                self.status_string = _('stopped caffeine [%s]' % self.process.pid)
+            else:
+                call(['caffeine-screensaver', 'resume', self.root_id])
+                self.status_string = _('no longer inhibiting desktop idleness')
+
+            LOGGER.info(self.status_string)
 
     def toggle_activated(self):
-        if not self.get_activated:
-            self.window = hex(self.root.id)
+        if not self.activated:
             self.inhibit()
-            LOGGER.info(self.status_string)
         else:
-            self.release()
+            self.resume()
 
-        self.emit('activation-toggled', self.get_activated, self.status_string)
+        self.emit('activation-toggled', self.activated, self.status_string)
 
 
 class GUI(object):
@@ -113,7 +109,7 @@ class GUI(object):
         self.indicator.set_status(AppIndicator3.IndicatorStatus.ACTIVE)
 
         self.activate_menuitem = get('activate_menuitem')
-        self.set_icon_is_activated(self.caffeine.get_activated)
+        self.set_icon_is_activated(self.caffeine.activated)
 
         # popup menu
         self.menu = get('popup_menu')
@@ -134,12 +130,12 @@ class GUI(object):
         # toggle the icon, indexing with a bool
         icon_name = ['caffeine-cup-empty', 'caffeine-cup-full'][activated]
         self.indicator.set_icon(icon_name)
-        self.activate_menuitem.set_label(self.labels[self.caffeine.get_activated])
+        self.activate_menuitem.set_label(self.labels[self.caffeine.activated])
 
     def on_activate_menuitem_activate(self, menuitem, data=None):
         # menu callbacks
         self.caffeine.toggle_activated()
-        menuitem.set_label(self.labels[self.caffeine.get_activated])
+        menuitem.set_label(self.labels[self.caffeine.activated])
 
     def on_about_menuitem_activate(self, menuitem, data=None):
         self.about_dialog.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
@@ -148,7 +144,7 @@ class GUI(object):
 
     def on_quit_menuitem_activate(self, menuitem, data=None):
         # ensure desktop idleness is uninhibited upon exit
-        self.caffeine.release()
+        self.caffeine.resume()
         Gtk.main_quit()
 
 
@@ -167,7 +163,7 @@ def get_base_path():
 # adapted from http://stackoverflow.com/questions/26388088/python-gtk-signal-handler-not-working
 def init_signal(gui):
     def signal_action(sig):
-        CAFFEINE.release()
+        CAFFEINE.resume()
         sys.exit(1)
 
     def idle_handler(*args):
@@ -184,9 +180,6 @@ def init_signal(gui):
         signal.signal(sig, idle_handler)
         GLib.idle_add(install_glib_handler, sig, priority=GLib.PRIORITY_HIGH)
 
-
-# register the gettext function for the whole interpreter as "_"
-# builtins._ = gettext.gettext
 
 BASE_PATH = get_base_path()
 GLADE_PATH = join(BASE_PATH, 'share', __program__, 'glade')
@@ -218,7 +211,7 @@ PARSER.add_argument(
     '-q', '--quiet',
     action='store_true',
     dest='quiet',
-    help='silence normal output')
+    help='suppress normal output')
 PARSER.add_argument(
     '-t', '--timestamp',
     action='store_true',
@@ -264,6 +257,7 @@ GObject.signal_new(
     [bool, str])
 GObject.threads_init()
 
+DISPLAY = Display()
 CAFFEINE = Caffeine()
 init_signal(GUI(CAFFEINE))
 Gtk.main()

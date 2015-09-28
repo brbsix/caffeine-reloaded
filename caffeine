@@ -38,99 +38,143 @@ __version__ = pkg_resources.require(__program__)[0].version
 class Caffeine(GObject.GObject):
     def __init__(self):
         GObject.GObject.__init__(self)
-        self.windowID = None
 
-        GObject.timeout_add(get_timeout(), self._check_for_fullscreen)
+        self.activated = False
+        self.root_id = hex(DISPLAY.screen().root.id)
 
-    def _check_for_fullscreen(self):
+        GObject.timeout_add(get_timeout(), self.execute)
+
+    def execute(self):
         """Check for an active fullscreen window and respond appropriately."""
-        win = EWMH.getActiveWindow()
-        windowID = hex(win.id)
 
-        inhibit = False
-        if win is not None:
-            try:
-                inhibit = '_NET_WM_STATE_FULLSCREEN' in EWMH.getWmState(win, str=True)
-            except:
-                pass
+        fullscreen = is_fullscreen()
 
         # if inhibition state has changed, take action
-        if (self.windowID is not None) != inhibit:
-            if inhibit:
-                self.windowID = windowID
-                call(['caffeine-screensaver', 'suspend', self.windowID], timeout=5)
-                LOGGER.info('inhibiting desktop idleness')
+        if self.activated != fullscreen:
+            if fullscreen:
+                self.inhibit()
             else:
-                self.release()
-        # if windowID has changed but inhibition state remains True, inhibit new windowID
-        elif windowID != self.windowID and inhibit:
-            self.windowID = windowID
-            call(['caffeine-screensaver', 'suspend', self.windowID], timeout=5)
+                self.resume()
 
-        # return True so timeout is rerun
         return True
 
-    def release(self):
-        """Resume the screensaver and DPMS after being suspended."""
-        if self.windowID is not None:
-            call(['caffeine-screensaver', 'resume', self.windowID], timeout=5)
+    def inhibit(self):
+        """Inhibit the screensaver."""
+
+        self.activated = True
+        LOGGER.info('inhibiting desktop idleness')
+        call(['caffeine-screensaver', 'suspend', self.root_id])
+
+    def resume(self):
+        """Resume the screensaver after being suspended."""
+
+        if self.activated:
+            self.activated = False
             LOGGER.info('no longer inhibiting desktop idleness')
-            self.windowID = None
+            call(['caffeine-screensaver', 'resume', self.root_id])
 
 
 # class Caffeine(GObject.GObject):
 #     def __init__(self):
 #         GObject.GObject.__init__(self)
-#         self.windowID = None
 
-#         GObject.timeout_add(get_timeout(), self._check_for_fullscreen)
+#         self.window = None
 
-#     def _check_for_fullscreen(self):
+#         GObject.timeout_add(get_timeout(), self.execute)
+
+#     def execute(self):
 #         """Check for an active fullscreen window and respond appropriately."""
-#         win = EWMH.getActiveWindow()
-#         windowID = hex(win.id)
 
-#         inhibit = False
-#         if win is not None:
-#             try:
-#                 inhibit = '_NET_WM_STATE_FULLSCREEN' in EWMH.getWmState(win, str=True)
-#             except:
-#                 pass
+#         activated = self._is_activated()
+#         alive = self._is_window_alive()
+#         inhibit = self._is_fullscreen()
 
 #         # if inhibition state has changed, take action
-#         if windowID != self.windowID or (self.windowID is not None) != inhibit:
+#         if alive != inhibit:
 #             if inhibit:
-#                 self.windowID = hex(win.id)
-#                 call(['caffeine-screensaver', 'suspend', self.windowID], timeout=5)
-#                 LOGGER.info('inhibiting desktop idleness')
-#             else:
-#                 self.release()
+#                 if activated:
+#                     LOGGER.info('reinhibiting desktop idleness')
+#                 else:
+#                     LOGGER.info('inhibiting desktop idleness')
 
-#         # return True so timeout is rerun
+#                 self.window = EWMH.getActiveWindow()
+#                 call(['caffeine-screensaver', 'suspend', self._get_window_id])
+#             else:
+#                 self.resume()
+#         # if fullscreen window has ended, take note
+#         elif not alive and activated:
+#             self.window = None
+#             LOGGER.info('no longer inhibiting desktop idleness')
+
 #         return True
 
-#     def release(self):
+#     @property
+#     def _get_window_id(self):
+#         """Return the window id of self.window."""
+
+#         return hex(self.window.id)
+
+#     def _is_activated(self):
+#         return self.window is not None
+
+#     def _is_fullscreen(self):
+#         """Check whether active window is fullscreen."""
+
+#         from Xlib.error import BadWindow
+
+#         window = EWMH.getActiveWindow()
+
+#         try:
+#             return '_NET_WM_STATE_FULLSCREEN' in EWMH.getWmState(window, str=True)
+#         except BadWindow:
+#             pass
+
+#         return False
+
+#     def _is_window_alive(self):
+#         """Check whether self.window is currently alive."""
+
+#         from Xlib.error import BadWindow
+
+#         try:
+#             if self._is_activated() and self.window.get_wm_state() is not None:
+#                 return True
+#         except BadWindow:
+#             pass
+
+#         return False
+
+#     def resume(self):
 #         """Resume the screensaver and DPMS after being suspended."""
-#         if self.windowID is not None:
-#             call(['caffeine-screensaver', 'resume', self.windowID], timeout=5)
+
+#         if self._is_activated():
+#             self.window = None
 #             LOGGER.info('no longer inhibiting desktop idleness')
-#             self.windowID = None
+
+#         if self._is_window_alive():
+#             call(['caffeine-screensaver', 'resume', self._get_window_id])
 
 
 def get_timeout():
     """Determine the program's timeout interval in milliseconds."""
 
-    # seconds = Display().get_screen_saver().interval
-    seconds = Display().get_screen_saver().timeout
+    # seconds = DISPLAY.get_screen_saver().interval
+    seconds = DISPLAY.get_screen_saver().timeout
+
+    LOGGER.info('screen saver timeout = %s s', seconds)
 
     # default to 30s if screensaver is off otherwise use t minus 10s
-    return (seconds - 10) * 1000 if seconds > 10 else 60000
+    interval = (seconds - 10) * 1000 if seconds > 10 else 60000
+
+    LOGGER.info('GObject interval = %s ms', interval)
+
+    return interval
 
 
 # adapted from http://stackoverflow.com/questions/26388088/python-gtk-signal-handler-not-working
 def init_signal():
     def signal_action(sig):
-        CAFFEINE.release()
+        CAFFEINE.resume()
         sys.exit(1)
 
     def idle_handler(*args):
@@ -146,6 +190,21 @@ def init_signal():
     for sig in [signal.SIGINT, signal.SIGTERM, signal.SIGHUP]:
         signal.signal(sig, idle_handler)
         GLib.idle_add(install_glib_handler, sig, priority=GLib.PRIORITY_HIGH)
+
+
+def is_fullscreen():
+    """Check whether active window is fullscreen."""
+
+    from Xlib.error import BadWindow
+
+    window = EWMH.getActiveWindow()
+
+    try:
+        return '_NET_WM_STATE_FULLSCREEN' in EWMH.getWmState(window, str=True)
+    except BadWindow:
+        pass
+
+    return False
 
 
 PARSER = argparse.ArgumentParser(
@@ -166,7 +225,7 @@ PARSER.add_argument(
     '-q', '--quiet',
     action='store_true',
     dest='quiet',
-    help='silence normal output')
+    help='suppress normal output')
 PARSER.add_argument(
     '-t', '--timestamp',
     action='store_true',
@@ -205,6 +264,7 @@ if not OPTIONS.quiet:
 # LOGGER.addHandler(STREAM)
 # LOGGER.setLevel(logging.WARNING if OPTIONS.quiet else logging.INFO)
 
+DISPLAY = Display()
 EWMH = EWMH_CLASS()
 GObject.threads_init()
 CAFFEINE = Caffeine()
