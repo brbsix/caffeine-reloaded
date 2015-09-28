@@ -71,7 +71,7 @@ License
 
 Created by Reuben Thomas <rrt@sc3d.org>
 
-Forked by Six <brbsix@gmail.com>
+Forked by Brian Beffa <brbsix@gmail.com>
 
 caffeine-reloaded is distributed under the GNU General Public License,
 either version 3, or (at your option) any later version. See COPYING.

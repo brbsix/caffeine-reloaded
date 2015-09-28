@@ -1,7 +1,7 @@
 Source: caffeine
 Section: misc
 Priority: optional
-Maintainer: Reuben Thomas <rrt@sc3d.org>
+Maintainer: Brian Beffa <brbsix@gmail.com>
 Build-Depends: debhelper (>= 8), dh-python, python3-all, python3-setuptools, gettext
 Standards-Version: 3.9.5
 Homepage: https://launchpad.net/caffeine
