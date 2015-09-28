@@ -199,7 +199,7 @@ PARSER = argparse.ArgumentParser(
     add_help=False,
     description=__description__,
     prog=__program__,
-    usage='%(prog)s [-a]')
+    usage='%(prog)s [OPTION]...')
 PARSER.add_argument(
     '-a', '--auto',
     action='store_true',

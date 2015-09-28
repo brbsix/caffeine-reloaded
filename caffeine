@@ -212,7 +212,7 @@ PARSER = argparse.ArgumentParser(
     add_help=False,
     description=__description__,
     prog=__program__,
-    usage='%(prog)s')
+    usage='%(prog)s [OPTION]...')
 PARSER.add_argument(
     '--align',
     action='store_true',
