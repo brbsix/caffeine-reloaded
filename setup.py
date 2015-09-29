@@ -57,7 +57,7 @@ setup(
     url='https://github.com/brbsix/caffeine-reloaded',
     license='GPLv3',
     py_modules=['ewmh'],
-    install_requires=['python3-xlib'],
+    install_requires=['python-xlib'],
     data_files=DATA_FILES,
     scripts=[
         'caffeine',
