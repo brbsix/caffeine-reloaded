@@ -16,7 +16,10 @@ def read(path):
 
 # update the translations
 PO_DIR = 'translations'
-check_call(['xgettext', '-o', join(PO_DIR, 'caffeine-indicator.pot'), '--from-code=UTF-8', '--language=python', 'caffeine-indicator'])
+check_call(['xgettext', '-o', join(PO_DIR, 'caffeine-indicator.pot'),
+                        '--from-code=UTF-8',
+                        '--language=python',
+                        'caffeine-indicator'])
 check_call(['./compile_translations.py', 'caffeine-indicator', PO_DIR])
 
 # don't trash the system icons!
@@ -26,14 +29,16 @@ BLACKLIST = ['index.theme']
 ROOT_DIR = dirname(abspath(__file__))
 SHARE_DIR = join(ROOT_DIR, 'share')
 
+# # generate list of data files to include
 # DATA_FILES = []
 # for path, dirs, files in walk(SHARE_DIR):
 #     DATA_FILES.append((relpath(path, ROOT_DIR),
 #                        [join(path, f) for f in files if f not in BLACKLIST]))
 
+# generate list of data files to include
 DATA_FILES = [(relpath(p, ROOT_DIR), [join(p, f) for f in files if f not in BLACKLIST]) for p, d, files in walk(SHARE_DIR)]
 
-# prepare caffeine-indicator.desktop for install to etc/xdg/autostart
+# prepare caffeine-indicator.desktop for install to ./etc/xdg/autostart
 DESKTOP_NAME = 'caffeine-indicator.desktop'
 DESKTOP_FILE = join('share', 'applications', DESKTOP_NAME)
 AUTOSTART_DIR = join('etc', 'xdg', 'autostart')
