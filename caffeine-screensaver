@@ -308,7 +308,7 @@ check_common_commands()
                 ;;
 
             --version)
-                echo "caffeine-screensaver 1.8.3"
+                echo "caffeine-screensaver 2.8.3"
                 exit_success
                 ;;
         esac
