@@ -10,6 +10,34 @@ when desired. This can be achieved automatically (detecting when the
 active window is fullscreen) or via manual toggle.
 
 
+Installation
+============
+
+**caffeine-reloaded** is available for installation solely via *.deb*. To install, you can do the following:
+
+::
+
+  curl --remote-name -sL https://github.com/brbsix/caffeine-reloaded/raw/master/caffeine-reloaded_0.0.1_all.deb
+  sudo dpkg --install caffeine-reloaded_0.0.1_all.deb
+  sudo apt-get install --fix-broken  # to resolve missing dependencies
+
+
+Development
+===========
+
+To build **caffeine-reloaded** into a *.deb* youself, you can do the following:
+
+::
+
+  # increment changelog (assuming you have updated VERSION)
+  dch --controlmaint --distribution vivid --newversion "$(< VERSION)" --urgency low
+
+  # build
+  debuild -b -uc -us
+
+If :code:`debuild` reports and missing build dependencies, just install them and retry.
+
+
 Usage
 =====
 
