@@ -1,1 +1,14 @@
-__pycache__/
+/.pybuild/
+/__pycache__/
+/build/
+/caffeine_reloaded.egg-info/
+/debian/caffeine-reloaded.debhelper.log
+/debian/caffeine-reloaded.postinst.debhelper
+/debian/caffeine-reloaded.postrm.debhelper
+/debian/caffeine-reloaded.prerm.debhelper
+/debian/caffeine-reloaded.substvars
+/debian/caffeine-reloaded/
+/debian/files
+/etc/
+/share/locale/
+/translations/caffeine-indicator.pot
