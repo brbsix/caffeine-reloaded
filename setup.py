@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 
-from distutils.core import setup
-from os import makedirs, walk
+from setuptools import setup
+from os import chdir, makedirs, walk
 from os.path import abspath, dirname, join, relpath
 from shutil import copy
 from subprocess import check_call
@@ -13,6 +13,10 @@ def read(path):
     with open(path) as f:
         return f.read().strip()
 
+
+# identify and enter root directory
+ROOT_DIR = dirname(abspath(__file__))
+chdir(ROOT_DIR)
 
 # update the translations
 PO_DIR = 'translations'
@@ -25,8 +29,6 @@ check_call(['./compile_translations.py', 'caffeine-indicator', PO_DIR])
 # don't trash the system icons!
 BLACKLIST = ['index.theme']
 
-# generate list of data files to include
-ROOT_DIR = dirname(abspath(__file__))
 SHARE_DIR = join(ROOT_DIR, 'share')
 
 # # generate list of data files to include
