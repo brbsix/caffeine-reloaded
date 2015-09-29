@@ -11,8 +11,8 @@ Architecture: all
 Depends:${misc:Depends}, ${python3:Depends},
     gir1.2-gtk-3.0, gir1.2-appindicator3-0.1, libappindicator3-1, libnet-dbus-perl, python3-pkg-resources, python3-xlib
 Conflicts: caffeine
-Description: Prevent the desktop becoming idle in full-screen mode
- Caffeine stops the desktop becoming idle when an application
- is running full-screen. A desktop indicator ‘caffeine-indicator’
- supplies a manual toggle, and the command ‘caffeinate’ can be used
+Description: Prevent the desktop becoming idle in fullscreen mode
+ ‘caffeine’ stops the desktop becoming idle when an application
+ is running full-screen. Status bar indicator ‘caffeine-indicator’
+ supplies an auto or manual toggle, and ‘caffeinate’ can be used
  to prevent idleness for the duration of any command.
