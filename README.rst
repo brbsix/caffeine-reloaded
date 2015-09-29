@@ -35,7 +35,7 @@ To build **caffeine-reloaded** into a *.deb* youself, you can do the following:
   # build
   debuild -b -uc -us
 
-If :code:`debuild` reports and missing build dependencies, just install them and retry.
+If :code:`debuild` reports missing build dependencies, just install them and retry.
 
 
 Usage
@@ -80,9 +80,8 @@ active window is fullscreen.
 Translations
 ============
 
-Please note that I've made significant changes from the original release
-of caffeine. That being said, translations have not been correspondingly
-updated.
+Please note that I've made significant changes from caffeine 2.8.3.
+Translations have not been correspondingly updated.
 
 If you want to test out a translation without changing the language for the
 whole session, run caffeine as e.g.: :code:`LANGUAGE=ru ./caffeine`
