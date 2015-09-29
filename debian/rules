@@ -1,6 +1,6 @@
 #!/usr/bin/make -f
 
-export PYBUILD_NAME=caffeine
+export PYBUILD_NAME=caffeine-reloaded
 
 %:
 	dh $@ --with python3 --buildsystem=pybuild

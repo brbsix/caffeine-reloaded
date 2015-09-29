@@ -35,7 +35,7 @@ from Xlib.display import Display
 
 __program__ = 'caffeine-indicator'
 __description__ = 'Toggle desktop idleness inhibition.'
-__version__ = pkg_resources.require('caffeine')[0].version
+__version__ = pkg_resources.require('caffeine-reloaded')[0].version
 
 
 class Caffeine(GObject.GObject):

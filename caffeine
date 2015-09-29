@@ -32,7 +32,7 @@ from Xlib.display import Display
 
 __program__ = 'caffeine'
 __description__ = 'Prevent desktop idleness in fullscreen mode.'
-__version__ = pkg_resources.require(__program__)[0].version
+__version__ = pkg_resources.require('caffeine-reloaded')[0].version
 
 
 class Caffeine(GObject.GObject):
