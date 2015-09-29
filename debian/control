@@ -2,14 +2,14 @@ Source: caffeine-reloaded
 Section: misc
 Priority: optional
 Maintainer: Brian Beffa <brbsix@gmail.com>
-Build-Depends: debhelper (>= 8), dh-python, python3-all, python3-setuptools, gettext
+Build-Depends: debhelper (>= 8), dh-python, gettext, python3-all, python3-setuptools
 Standards-Version: 3.9.5
 Homepage: https://github.com/brbsix/caffeine-reloaded
 
 Package: caffeine-reloaded
 Architecture: all
 Depends:${misc:Depends}, ${python3:Depends},
-    gir1.2-gtk-3.0, gir1.2-appindicator3-0.1, python3-xlib, python3-pkg-resources, libnet-dbus-perl
+    gir1.2-gtk-3.0, gir1.2-appindicator3-0.1, libappindicator3-1, libnet-dbus-perl, python3-pkg-resources, python3-xlib
 Conflicts: caffeine
 Description: Prevent the desktop becoming idle in full-screen mode
  Caffeine stops the desktop becoming idle when an application
