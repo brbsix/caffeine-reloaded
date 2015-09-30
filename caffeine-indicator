@@ -243,14 +243,6 @@ LOGGER.addHandler(STREAM)
 if not OPTIONS.quiet:
     LOGGER.setLevel(logging.INFO)
 
-# # set up logging
-# LOGGER = logging.getLogger(__program__)
-# STREAM = logging.StreamHandler()
-# FORMAT = logging.Formatter('%(levelname)s:%(name)s: %(message)s')
-# STREAM.setFormatter(FORMAT)
-# LOGGER.addHandler(STREAM)
-# LOGGER.setLevel(logging.WARNING if OPTIONS.quiet else logging.INFO)
-
 GObject.signal_new(
     'activation-toggled',
     Caffeine,
