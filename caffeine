@@ -162,12 +162,12 @@ def get_timeout():
     # seconds = DISPLAY.get_screen_saver().interval
     seconds = DISPLAY.get_screen_saver().timeout
 
-    LOGGER.info('screen saver timeout = %s s', seconds)
+    LOGGER.info('screen saver timeout = %d s', seconds)
 
     # default to 30s if screensaver is off otherwise use t minus 10s
     interval = (seconds - 10) * 1000 if seconds > 10 else 60000
 
-    LOGGER.info('GObject interval = %s ms', interval)
+    LOGGER.info('GObject interval = %d ms', interval)
 
     return interval
 
