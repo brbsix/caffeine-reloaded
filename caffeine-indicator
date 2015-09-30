@@ -159,7 +159,6 @@ def get_base_path():
 
         path = abspath(join(path, pardir))
 
-
     raise Exception('Unable to determine BASE_PATH')
 
 
