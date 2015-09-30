@@ -107,7 +107,7 @@ def init_signal(caffeine):
         # GLib.unix_signal_add was added in glib 2.36
         GLib.unix_signal_add(GLib.PRIORITY_HIGH, sig, handler, sig)
 
-    # catch SIGINT/SIGTERM/SIGHUB and handle appropriately
+    # catch signals and handle appropriately
     for sig in [signal.SIGINT, signal.SIGTERM, signal.SIGHUP]:
         signal.signal(sig, idle_handler)
         GLib.idle_add(install_glib_handler, sig, priority=GLib.PRIORITY_HIGH)
