@@ -203,9 +203,7 @@ def is_fullscreen():
     try:
         return '_NET_WM_STATE_FULLSCREEN' in EWMH.getWmState(window, str=True)
     except BadWindow:
-        pass
-
-    return False
+        return False
 
 
 PARSER = argparse.ArgumentParser(
