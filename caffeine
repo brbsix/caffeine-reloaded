@@ -86,7 +86,7 @@ def get_timeout():
     # default to 30s if screensaver is off otherwise use t minus 10s
     interval = (seconds - 10) * 1000 if seconds > 10 else 60000
 
-    LOGGER.info('GObject interval = %d ms', interval)
+    LOGGER.info('GObject interval = %d s', interval / 1000)
 
     return interval
 
