@@ -92,9 +92,9 @@ def get_timeout():
 
 
 # adapted from http://stackoverflow.com/questions/26388088/python-gtk-signal-handler-not-working
-def init_signal():
+def init_signal(caffeine):
     def signal_action(sig):
-        CAFFEINE.resume()
+        caffeine.resume()
         sys.exit(1)
 
     def idle_handler(*args):
@@ -182,6 +182,5 @@ if not OPTIONS.quiet:
 DISPLAY = Display()
 EWMH = EWMH_CLASS()
 GObject.threads_init()
-CAFFEINE = Caffeine()
-init_signal()
+init_signal(Caffeine())
 Gtk.main()

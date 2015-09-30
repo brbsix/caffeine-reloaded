@@ -92,7 +92,7 @@ class Caffeine(GObject.GObject):
         self.emit('activation-toggled', self.activated, self.status_string)
 
 
-class GUI(object):
+class Gui:
 
     def __init__(self, caffeine):
         self.caffeine = caffeine
@@ -165,7 +165,7 @@ def get_base_path():
 # adapted from http://stackoverflow.com/questions/26388088/python-gtk-signal-handler-not-working
 def init_signal(gui):
     def signal_action(sig):
-        CAFFEINE.resume()
+        gui.caffeine.resume()
         sys.exit(1)
 
     def idle_handler(*args):
@@ -252,6 +252,5 @@ GObject.signal_new(
 GObject.threads_init()
 
 DISPLAY = Display()
-CAFFEINE = Caffeine()
-init_signal(GUI(CAFFEINE))
+init_signal(Gui(Caffeine()))
 Gtk.main()
