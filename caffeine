@@ -181,6 +181,8 @@ if not OPTIONS.quiet:
 
 DISPLAY = Display()
 EWMH = EWMH_CLASS()
+
+# Calling GObject.threads_init() is not needed for PyGObject 3.10.2+
 GObject.threads_init()
 init_signal(Caffeine())
 Gtk.main()

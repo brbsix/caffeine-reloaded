@@ -249,6 +249,8 @@ GObject.signal_new(
     GObject.SignalFlags.RUN_FIRST,
     None,
     [bool, str])
+
+# Calling GObject.threads_init() is not needed for PyGObject 3.10.2+
 GObject.threads_init()
 
 DISPLAY = Display()
