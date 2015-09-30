@@ -200,6 +200,10 @@ def is_fullscreen():
 
     window = EWMH.getActiveWindow()
 
+    # getActiveWindow() will sometimes return None
+    if window is None:
+        return False
+
     try:
         return '_NET_WM_STATE_FULLSCREEN' in EWMH.getWmState(window, str=True)
     except BadWindow:
