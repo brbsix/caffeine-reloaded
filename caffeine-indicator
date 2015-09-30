@@ -74,9 +74,12 @@ class Caffeine(GObject.GObject):
                     # ensure caffeine has terminated before continuing
                     self.process.wait(timeout=5)
                 except TimeoutExpired:
-                    LOGGER.error('timed out attempting to terminate caffeine [%s]', self.process.pid)
+                    LOGGER.error(
+                        'timed out attempting to terminate caffeine [%s]',
+                        self.process.pid)
 
-                self.status_string = _('stopped caffeine [%s]' % self.process.pid)
+                self.status_string = _('stopped caffeine [%s]' %
+                                       self.process.pid)
             else:
                 call(['caffeine-screensaver', 'resume', self.root_id])
                 self.status_string = _('no longer inhibiting desktop idleness')
@@ -162,7 +165,8 @@ def get_base_path():
     raise Exception('Unable to determine BASE_PATH')
 
 
-# adapted from http://stackoverflow.com/questions/26388088/python-gtk-signal-handler-not-working
+# adapted from:
+# http://stackoverflow.com/questions/26388088/python-gtk-signal-handler-not-working
 def init_signals(gui):
     def signal_action(sig):
         gui.caffeine.resume()
