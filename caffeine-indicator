@@ -163,7 +163,7 @@ def get_base_path():
 
 
 # adapted from http://stackoverflow.com/questions/26388088/python-gtk-signal-handler-not-working
-def init_signal(gui):
+def init_signals(gui):
     def signal_action(sig):
         gui.caffeine.resume()
         sys.exit(1)
@@ -255,5 +255,5 @@ GObject.signal_new(
 GObject.threads_init()
 
 DISPLAY = Display()
-init_signal(Gui(Caffeine()))
+init_signals(Gui(Caffeine()))
 Gtk.main()
