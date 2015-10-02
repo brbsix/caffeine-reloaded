@@ -21,18 +21,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import argparse
 import logging
-import pkg_resources
 import signal
 import sys
 
 from ewmh import EWMH as EWMH_CLASS
 from gi.repository import GObject, Gtk, GLib
+from pkg_resources import get_distribution
 from subprocess import call
 from Xlib.display import Display
 
 __program__ = 'caffeine'
 __description__ = 'Prevent desktop idleness in fullscreen mode.'
-__version__ = pkg_resources.require('caffeine-reloaded')[0].version
+__version__ = get_distribution('caffeine-reloaded').version
 
 
 class Caffeine(GObject.GObject):

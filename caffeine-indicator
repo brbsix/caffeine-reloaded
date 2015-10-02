@@ -23,19 +23,19 @@ import argparse
 import gettext
 import locale
 import logging
-import pkg_resources
 import signal
 import sys
 
 from gettext import gettext as _
 from gi.repository import AppIndicator3, GLib, GObject, Gtk
 from os.path import abspath, dirname, exists, join, pardir
+from pkg_resources import get_distribution
 from subprocess import call, Popen, TimeoutExpired
 from Xlib.display import Display
 
 __program__ = 'caffeine-indicator'
 __description__ = 'Toggle desktop idleness inhibition.'
-__version__ = pkg_resources.require('caffeine-reloaded')[0].version
+__version__ = get_distribution('caffeine-reloaded').version
 
 
 class Caffeine(GObject.GObject):
