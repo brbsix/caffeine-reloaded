@@ -194,6 +194,7 @@ GLADE_PATH = join(BASE_PATH, 'share', __program__, 'glade')
 # set up translations
 LOCALE_PATH = join(BASE_PATH, 'share', 'locale')
 
+# use the default locale as defined by the LANG variable
 locale.setlocale(locale.LC_ALL, '')
 
 for module in locale, gettext:
