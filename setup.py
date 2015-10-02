@@ -20,6 +20,7 @@ chdir(ROOT_DIR)
 
 # update the translations
 PO_DIR = 'translations'
+makedirs(PO_DIR, exist_ok=True)
 check_call(['xgettext', '-o', join(PO_DIR, 'caffeine-indicator.pot'),
                         '--from-code=UTF-8',
                         '--language=python',
