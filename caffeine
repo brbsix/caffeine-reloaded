@@ -23,11 +23,12 @@ import argparse
 import logging
 import signal
 import sys
+import time
 
 from ewmh import EWMH as EWMH_CLASS
-from gi.repository import GObject, Gtk, GLib
 from pkg_resources import get_distribution
 from subprocess import call
+from threading import Event, Thread
 from Xlib.display import Display
 
 __program__ = 'caffeine'
@@ -35,15 +36,12 @@ __description__ = 'Prevent desktop idleness in fullscreen mode.'
 __version__ = get_distribution('caffeine-reloaded').version
 
 
-class Caffeine(GObject.GObject):
+class Caffeine:
 
     def __init__(self):
-        GObject.GObject.__init__(self)
-
         self.activated = False
         self.root_id = hex(DISPLAY.screen().root.id)
-
-        GObject.timeout_add(get_timeout(), self.execute)
+        self.timer = RepeatedTimer(get_timeout(), self.execute)
 
     def execute(self):
         """Check for an active fullscreen window and respond appropriately."""
@@ -74,9 +72,40 @@ class Caffeine(GObject.GObject):
             LOGGER.info('no longer inhibiting desktop idleness')
             call(['caffeine-screensaver', 'resume', self.root_id])
 
+    def stop(self):
+        """Stop caffeine."""
+
+        self.timer.stop()
+        self.resume()
+
+
+class RepeatedTimer:
+
+    """Repeat `function` every `interval` seconds."""
+
+    def __init__(self, interval, function):
+        self.interval = interval
+        self.function = function
+        self.start = time.time()
+        self.event = Event()
+        self.thread = Thread(target=self._target)
+        self.thread.start()
+
+    def _target(self):
+        while not self.event.wait(self._time):
+            self.function()
+
+    @property
+    def _time(self):
+        return self.interval - ((time.time() - self.start) % self.interval)
+
+    def stop(self):
+        self.event.set()
+        self.thread.join()
+
 
 def get_timeout():
-    """Determine the program's timeout interval in milliseconds."""
+    """Determine the program's timeout interval in seconds."""
 
     # seconds = DISPLAY.get_screen_saver().interval
     seconds = DISPLAY.get_screen_saver().timeout
@@ -84,34 +113,26 @@ def get_timeout():
     LOGGER.info('screen saver timeout = %d s', seconds)
 
     # default to 60s if screensaver is off otherwise use t minus 10s
-    interval = (seconds - 10) * 1000 if seconds > 10 else 60000
+    interval = (seconds - 10) if seconds > 10 else 60
 
-    LOGGER.info('GObject interval = %d s', interval / 1000)
+    LOGGER.info('timer interval = %d s', interval)
 
     return interval
 
 
-# adapted from:
-# http://stackoverflow.com/questions/26388088/python-gtk-signal-handler-not-working
 def init_signals(caffeine):
-    def signal_action(sig):
-        caffeine.resume()
+    """Catch signals to stop caffeine before exiting."""
+
+    def signal_action(signum, frame):
+        caffeine.stop()
         sys.exit(1)
-
-    def idle_handler(*args):
-        GLib.idle_add(signal_action, priority=GLib.PRIORITY_HIGH)
-
-    def handler(*args):
-        signal_action(args[0])
-
-    def install_glib_handler(sig):
-        # GLib.unix_signal_add was added in glib 2.36
-        GLib.unix_signal_add(GLib.PRIORITY_HIGH, sig, handler, sig)
 
     # catch signals and handle appropriately
     for sig in [signal.SIGINT, signal.SIGTERM, signal.SIGHUP]:
-        signal.signal(sig, idle_handler)
-        GLib.idle_add(install_glib_handler, sig, priority=GLib.PRIORITY_HIGH)
+        signal.signal(sig, signal_action)
+
+    # stay on the main thread to receive signal
+    signal.pause()
 
 
 def is_fullscreen():
@@ -183,7 +204,4 @@ if not OPTIONS.quiet:
 DISPLAY = Display()
 EWMH = EWMH_CLASS()
 
-# Calling GObject.threads_init() is not needed for PyGObject 3.10.2+
-GObject.threads_init()
 init_signals(Caffeine())
-Gtk.main()
