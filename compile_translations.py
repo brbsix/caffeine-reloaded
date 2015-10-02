@@ -4,11 +4,11 @@
 
 import sys
 from os import makedirs, walk
-from os.path import join
+from os.path import basename, join, splitext
 from subprocess import check_call
 
 
-if len(sys.argv) < 3:
+if len(sys.argv) != 3:
     print('Usage: %s <program-name> <po directory>' % sys.argv[0])
     sys.exit(0)
 
@@ -21,14 +21,14 @@ PROGRAM = sys.argv[-2]
 #         if filename.split('.')[-1] == 'po':
 #             PO_FILES.append(join(dirpath, filename))
 
-PO_FILES = [join(p, f) for p, d, files in walk(PO_DIR) \
-            for f in files if f.split('.')[-1] == 'po']
+PO_FILES = [join(p, f) for p, d, files in walk(PO_DIR)
+            for f in files if f.endswith('.po')]
 
 for po in PO_FILES:
-    lang = po.split('/')[-1]
+    lang = basename(po)
     print('Compiling for Locale: ' + ''.join(lang.split('.')[:-1]))
     lang = lang.split('-')[-1]
-    lang = lang.split('.')[0]
+    lang = splitext(lang)[0]
     lang = lang.strip()
     if not lang:
         continue
