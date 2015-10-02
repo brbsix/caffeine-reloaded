@@ -10,7 +10,7 @@ Package: caffeine-reloaded
 Architecture: all
 Depends:${misc:Depends}, ${python3:Depends},
     gir1.2-gtk-3.0, gir1.2-appindicator3-0.1, libappindicator3-1, libnet-dbus-perl, python3-pkg-resources, python3-xlib
-Conflicts: caffeine
+Conflicts: caffeine, caffeine-plus
 Description: Prevent the desktop becoming idle in fullscreen mode
  ‘caffeine’ stops the desktop becoming idle when an application
  is running full-screen. Status bar indicator ‘caffeine-indicator’
