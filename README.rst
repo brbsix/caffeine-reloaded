@@ -17,8 +17,8 @@ Installation
 
 ::
 
-  curl --remote-name -sL https://github.com/brbsix/caffeine-reloaded/raw/master/caffeine-reloaded_0.0.1_all.deb
-  sudo dpkg --install caffeine-reloaded_0.0.1_all.deb
+  curl --remote-name -sL https://github.com/brbsix/caffeine-reloaded/raw/master/caffeine-reloaded_0.0.2_all.deb
+  sudo dpkg --install caffeine-reloaded_0.0.2_all.deb
   sudo apt-get install --fix-broken  # to resolve missing dependencies
 
 

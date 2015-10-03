@@ -1,3 +1,11 @@
+caffeine-reloaded (0.0.2) vivid; urgency=medium
+
+  * Implement RepeatedTimer using threading module
+
+  * Fix exception that occurs when getActiveWindow() returns None
+
+ -- Brian Beffa <brbsix@gmail.com>  Fri, 02 Oct 2015 07:33:30 -0700
+
 caffeine-reloaded (0.0.1) vivid; urgency=low
 
   * Initial release.
