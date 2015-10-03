@@ -30,7 +30,7 @@ To build **caffeine-reloaded** into a *.deb* youself, you can do the following:
 ::
 
   # increment changelog (assuming you have updated VERSION)
-  dch --controlmaint --distribution vivid --newversion "$(< VERSION)" --urgency low
+  dch --controlmaint --distribution vivid --newversion "$(< ../VERSION)" --urgency low
 
   # build
   debuild -b -uc -us
