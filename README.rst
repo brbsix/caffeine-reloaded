@@ -13,13 +13,32 @@ active window is fullscreen) or via manual toggle.
 Installation
 ============
 
-**caffeine-reloaded** is available for installation solely via *.deb*. To install, you can do the following:
+**caffeine-reloaded** is available for installation solely via *.deb*.
+
+To download, visit `latest release`_ or run the following command:
 
 ::
 
   curl --remote-name -sL https://github.com/brbsix/caffeine-reloaded/raw/master/caffeine-reloaded_0.0.2_all.deb
+
+To install with :code:`apt` and :code:`dpkg`:
+
+::
+
   sudo dpkg --install caffeine-reloaded_0.0.2_all.deb
-  sudo apt-get install --fix-broken  # to resolve missing dependencies
+  sudo apt-get install --fix-broken  # to resolve any missing dependencies
+
+To install with :code:`gdebi`:
+
+::
+
+  sudo gdebi ./caffeine-reloaded_0.0.2_all.deb
+
+To install with :code:`gdebi-gtk`:
+
+::
+
+  gdebi-gtk ./caffeine-reloaded_0.0.2_all.deb
 
 
 Development
@@ -111,3 +130,4 @@ your option) any later version. See COPYING.LESSER.
 caffeine-reloaded uses pyewmh from http://sf.net/projects/pyewmh
 
 .. _lp:caffeine: http://launchpad.net/caffeine
+.. _latest release: https://github.com/brbsix/caffeine-reloaded/releases/latest
