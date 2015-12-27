@@ -40,6 +40,8 @@ __version__ = get_distribution('caffeine-reloaded').version
 
 class Caffeine:
 
+    """Inhibit the screensaver when the active window is in fullscreen mode."""
+
     def __init__(self):
         self.activated = False
         self.root_id = hex(DISPLAY.screen().root.id)
@@ -94,14 +96,17 @@ class RepeatedTimer:  # pylint: disable=too-few-public-methods
         self.thread.start()
 
     def _target(self):
+        """Loop to block until timeout occurs then execute function."""
         while not self.event.wait(self._time):
             self.function()
 
     @property
     def _time(self):
+        """Determine wait time in seconds."""
         return self.interval - ((time.time() - self.start) % self.interval)
 
     def stop(self):
+        """Stop timer."""
         self.event.set()
         self.thread.join()
 
@@ -126,6 +131,7 @@ def init_signals(caffeine):
     """Catch signals to stop caffeine before exiting."""
 
     def signal_action(signum, frame):  # pylint: disable=unused-argument
+        """To be executed upon exit signal."""
         caffeine.stop()
         sys.exit(1)
 

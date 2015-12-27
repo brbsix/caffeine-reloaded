@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
+"""Compile translations"""
+
 
 import sys
 from os import makedirs, walk
