@@ -22,9 +22,7 @@ chdir(ROOT_DIR)
 PO_DIR = 'translations'
 makedirs(PO_DIR, exist_ok=True)
 check_call(['xgettext', '-o', join(PO_DIR, 'caffeine-indicator.pot'),
-                        '--from-code=UTF-8',
-                        '--language=python',
-                        'caffeine-indicator'])
+            '--from-code=UTF-8', '--language=python', 'caffeine-indicator'])
 check_call(['./compile_translations.py', 'caffeine-indicator', PO_DIR])
 
 # don't trash the system icons!
