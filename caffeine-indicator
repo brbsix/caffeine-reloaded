@@ -79,6 +79,8 @@ class Caffeine(GObject.GObject):
                     LOGGER.error(
                         'timed out attempting to terminate caffeine [%s]',
                         self.process.pid)
+                    # use SIGKILL to kill off the process as a last resort
+                    self.process.kill()
 
                 self.status_string = _('stopped caffeine [%s]' %
                                        self.process.pid)
