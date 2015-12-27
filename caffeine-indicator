@@ -173,19 +173,16 @@ def get_base_path():
 # adapted from:
 # http://stackoverflow.com/questions/26388088/python-gtk-signal-handler-not-working
 def init_signals(gui):
-    def signal_action(sig):
+    def signal_action():
         gui.caffeine.resume()
         sys.exit(1)
 
     def idle_handler(*args):  # pylint: disable=unused-argument
         GLib.idle_add(signal_action, priority=GLib.PRIORITY_HIGH)
 
-    def handler(*args):
-        signal_action(args[0])
-
     def install_glib_handler(sig):
         # GLib.unix_signal_add was added in glib 2.36
-        GLib.unix_signal_add(GLib.PRIORITY_HIGH, sig, handler, sig)
+        GLib.unix_signal_add(GLib.PRIORITY_HIGH, sig, signal_action)
 
     # catch signals and handle appropriately
     for sig in [signal.SIGINT, signal.SIGTERM, signal.SIGHUP]:
