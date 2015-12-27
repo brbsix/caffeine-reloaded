@@ -19,18 +19,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 
+# stdlib imports
 import argparse
 import gettext
 import locale
 import logging
 import signal
 import sys
-
 from gettext import gettext as _
-from gi.repository import AppIndicator3, GLib, GObject, Gtk
 from os.path import abspath, dirname, exists, join, pardir
-from pkg_resources import get_distribution
 from subprocess import call, Popen, TimeoutExpired
+
+# third-party imports
+from gi.repository import AppIndicator3, GLib, GObject, Gtk
+from pkg_resources import get_distribution
 from Xlib.display import Display
 
 __program__ = 'caffeine-indicator'

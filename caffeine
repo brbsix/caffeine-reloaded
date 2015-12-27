@@ -19,16 +19,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 
+# stdlib imports
 import argparse
 import logging
 import signal
 import sys
 import time
-
-from ewmh import EWMH as EWMH_CLASS
-from pkg_resources import get_distribution
 from subprocess import call
 from threading import Event, Thread
+
+# third-party imports
+from ewmh import EWMH as EWMH_CLASS
+from pkg_resources import get_distribution
 from Xlib.display import Display
 
 __program__ = 'caffeine'
