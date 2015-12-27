@@ -44,12 +44,12 @@ To install with :code:`gdebi-gtk`:
 Development
 ===========
 
-To build **caffeine-reloaded** into a *.deb* youself, you can do the following:
+To build **caffeine-reloaded** into a *.deb* youself, run the following from package's root directory:
 
 ::
 
   # increment changelog (assuming you have updated VERSION)
-  dch --controlmaint --distribution vivid --newversion "$(< ../VERSION)" --urgency low
+  dch --controlmaint --distribution vivid --newversion "$(< VERSION)" --urgency low
 
   # build
   debuild -b -uc -us
