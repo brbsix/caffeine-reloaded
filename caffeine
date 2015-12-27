@@ -81,7 +81,7 @@ class Caffeine:
         self.resume()
 
 
-class RepeatedTimer:
+class RepeatedTimer:  # pylint: disable=too-few-public-methods
 
     """Repeat `function` every `interval` seconds."""
 
@@ -125,7 +125,7 @@ def get_timeout():
 def init_signals(caffeine):
     """Catch signals to stop caffeine before exiting."""
 
-    def signal_action(signum, frame):
+    def signal_action(signum, frame):  # pylint: disable=unused-argument
         caffeine.stop()
         sys.exit(1)
 

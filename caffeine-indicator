@@ -130,6 +130,7 @@ class Gui:
 
         builder.connect_signals(self)
 
+    # pylint: disable=unused-argument
     def on_activation_toggled(self, source, active, tooltip):
         self.set_icon_is_activated(active)
 
@@ -174,7 +175,7 @@ def init_signals(gui):
         gui.caffeine.resume()
         sys.exit(1)
 
-    def idle_handler(*args):
+    def idle_handler(*args):  # pylint: disable=unused-argument
         GLib.idle_add(signal_action, priority=GLib.PRIORITY_HIGH)
 
     def handler(*args):
