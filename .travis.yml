@@ -1,5 +1,13 @@
 language:
-  - bash  # bash maps to generic
+  - python
+
+python:
+  - "3.2"
+  - "3.3"
+  - "3.4"
+  - "3.5"
+  - "3.5-dev" # 3.5 development branch
+  - "nightly" # currently points to 3.6-dev
 
 addons:
   apt:
