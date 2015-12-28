@@ -44,17 +44,16 @@ To install with :code:`gdebi-gtk`:
 Development
 ===========
 
-To build **caffeine-reloaded** into a *.deb* youself, run the following from package's root directory:
+To create a new release, ensure **devscripts** is installed then run the following:
 
-::
+1. Bump version and increment changelog with `./bump-version.sh`
+2. Build the *.deb* with `make deb`
+3. Commit the changes (excluding the *.deb* package)
+4. Tag the release (e.g. `git tag v0.0.1`)
+5. Push the release (e.g. `git push origin master v0.0.1` or `git push origin master --tags`)
+6. Attach the *.deb* package to the release via GitHub's web interface (this keeps builds out of the repo history)
 
-  # increment changelog (assuming you have updated VERSION)
-  dch --controlmaint --distribution vivid --newversion "$(< VERSION)" --urgency low
-
-  # build
-  debuild -b -uc -us
-
-If :code:`debuild` reports missing build dependencies, just install them and retry.
+If :code:`debuild` reports missing build dependencies (e.g. python3-all or python3-setuptools), install them and retry `make deb`.
 
 
 Usage
