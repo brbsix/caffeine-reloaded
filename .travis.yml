@@ -1,0 +1,11 @@
+language:
+  - bash  # bash maps to generic
+
+addons:
+  apt:
+    packages:
+    - python3-all
+    - python3-setuptools
+
+script:
+  - make deb
