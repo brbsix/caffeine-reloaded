@@ -25,6 +25,11 @@ FILES=(caffeine-screensaver
        README.rst
        VERSION)
 
+# ensure debchange is installed
+hash dch &>/dev/null || {
+    error "debchange is not installed... please install devscripts"
+}
+
 # enter the script directory
 cd "$SCRIPT_DIRECTORY" || {
     error "Failed to cd into $SCRIPT_DIRECTORY"
