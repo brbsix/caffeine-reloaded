@@ -46,7 +46,8 @@ Development
 
 To create a new release, ensure build dependencies are installed:
 
-    sudo apt-get install --no-install-recommends debhelper devscripts dh-python python3-all python3-setuptools
+    sudo apt-get install devscripts
+    sudo apt-get install --no-install-recommends debhelper python3-all python3-setuptools
 
 Then run the following:
 
