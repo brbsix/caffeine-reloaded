@@ -4,6 +4,7 @@ language:
 addons:
   apt:
     packages:
+    - devscripts
     - python3-all
     - python3-setuptools
 
