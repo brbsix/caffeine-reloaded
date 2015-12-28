@@ -5,6 +5,7 @@ addons:
   apt:
     packages:
     - devscripts
+    - fakeroot
     - python3-all
     - python3-setuptools
 
