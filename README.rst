@@ -51,8 +51,8 @@ To create a new release, ensure build dependencies are installed:
 Then run the following:
 
 1. Bump version and increment changelog with `./bump-version.sh`
-2. Build the *.deb* with `make deb`
-3. Commit the changes (excluding the *.deb* package)
+2. Commit the changes
+3. Build the *.deb* with `make deb`
 4. Tag the release (e.g. `git tag v0.0.1`)
 5. Push the release (e.g. `git push origin master v0.0.1` or `git push origin master --tags`)
 6. Attach the *.deb* package to the release via GitHub's web interface (this keeps builds out of the repo history)
