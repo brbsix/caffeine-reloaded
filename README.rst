@@ -19,7 +19,7 @@ To download, visit `latest release`_ or run the following command:
 
 ::
 
-  curl --remote-name -sL https://github.com/brbsix/caffeine-reloaded/raw/master/caffeine-reloaded_0.0.2_all.deb
+  curl --remote-name -sL https://github.com/brbsix/caffeine-reloaded/releases/download/v0.0.2/caffeine-reloaded_0.0.2_all.deb
 
 To install with :code:`apt` and :code:`dpkg`:
 
