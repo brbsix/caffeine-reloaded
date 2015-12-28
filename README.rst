@@ -19,26 +19,26 @@ To download, visit `latest release`_ or run the following command:
 
 ::
 
-  curl --remote-name -sL https://github.com/brbsix/caffeine-reloaded/releases/download/v0.0.2/caffeine-reloaded_0.0.2_all.deb
+  curl --remote-name -sL https://github.com/brbsix/caffeine-reloaded/releases/download/v0.0.3/caffeine-reloaded_0.0.3_all.deb
 
 To install with :code:`apt` and :code:`dpkg`:
 
 ::
 
-  sudo dpkg --install caffeine-reloaded_0.0.2_all.deb
+  sudo dpkg --install caffeine-reloaded_0.0.3_all.deb
   sudo apt-get install --fix-broken  # to resolve any missing dependencies
 
 To install with :code:`gdebi`:
 
 ::
 
-  sudo gdebi ./caffeine-reloaded_0.0.2_all.deb
+  sudo gdebi ./caffeine-reloaded_0.0.3_all.deb
 
 To install with :code:`gdebi-gtk`:
 
 ::
 
-  gdebi-gtk ./caffeine-reloaded_0.0.2_all.deb
+  gdebi-gtk ./caffeine-reloaded_0.0.3_all.deb
 
 
 Development

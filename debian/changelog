@@ -1,3 +1,12 @@
+caffeine-reloaded (0.0.3) vivid; urgency=low
+
+  * Add perl to package depends
+  * Ensure caffeine-indicator kills off caffeine process when finished
+  * Remove python-xlib from setup.py's install_requires
+  * Simplify caffeine-indicator's GTK signal handling
+
+ -- Brian Beffa <brbsix@gmail.com>  Sun, 27 Dec 2015 21:27:50 -0800
+
 caffeine-reloaded (0.0.2) vivid; urgency=medium
 
   * Implement RepeatedTimer using threading module
