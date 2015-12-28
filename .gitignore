@@ -1,5 +1,6 @@
 /.pybuild/
 /__pycache__/
+/*.deb
 /build/
 /caffeine_reloaded.egg-info/
 /debian/caffeine-reloaded.debhelper.log
