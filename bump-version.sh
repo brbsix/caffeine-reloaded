@@ -48,14 +48,14 @@ read -ei "$CURRENT_VERSION" -p 'Please enter new version number: ' NEW_VERSION
     error "Failed to set new version"
 }
 
+# update changelog
+dch --controlmaint --distribution "$(lsb_release -cs)" --newversion "$NEW_VERSION" --urgency low || {
+    error "debchange experienced an unknown error"
+}
+
 # update version strings
 for file in "${FILES[@]}"; do
     sed -i "s/${CURRENT_VERSION//./\\.}/$NEW_VERSION/g" "$file" || {
         error "Failed to update version string in '$file'"
     }
 done
-
-# update changelog
-dch --controlmaint --distribution "$(lsb_release -cs)" --newversion "$NEW_VERSION" --urgency low || {
-    error "debchange experienced an unknown error"
-}
