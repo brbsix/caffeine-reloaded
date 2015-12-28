@@ -46,7 +46,7 @@ Development
 
 To create a new release, ensure build dependencies are installed:
 
-    sudo apt-get install --no-install-recommends debhelper devscripts libdistro-info-perl libparse-debcontrol-perl python3-all python3-setuptools
+    sudo apt-get install --no-install-recommends build-essential debhelper devscripts libdistro-info-perl libparse-debcontrol-perl python3-all python3-setuptools
 
 Then run the following:
 
