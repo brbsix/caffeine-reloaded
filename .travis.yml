@@ -14,8 +14,7 @@ python:
 
 before_install:
   - sudo apt-get update -qq
-  - sudo apt-get install -y devscripts
-  - sudo apt-get install --no-install-recommends -y debhelper python3-all python3-setuptools
+  - sudo apt-get install --no-install-recommends -y debhelper devscripts libdistro-info-perl libparse-debcontrol-perl python3-all python3-setuptools
 
 script:
   - make deb
