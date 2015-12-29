@@ -1,6 +1,12 @@
 caffeine-reloaded
 -----------------
 
+.. image:: https://img.shields.io/github/release/brbsix/caffeine-reloaded.svg
+  :target: https://github.com/brbsix/caffeine-reloaded/releases/latest
+
+.. image:: https://travis-ci.org/brbsix/caffeine-reloaded.svg?branch=master
+  :target: https://travis-ci.org/brbsix/caffeine-reloaded
+
 **caffeine-reloaded** is an almost complete rewrite of lp:caffeine_
 It was created in an effort to tidy up the code, increase stability,
 and add additional features.
