@@ -135,4 +135,5 @@ your option) any later version. See COPYING.LESSER.
 caffeine-reloaded uses pyewmh from http://sf.net/projects/pyewmh
 
 .. _lp:caffeine: http://launchpad.net/caffeine
+
 .. _latest release: https://github.com/brbsix/caffeine-reloaded/releases/latest
