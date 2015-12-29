@@ -1,5 +1,5 @@
-About
-=====
+caffeine-reloaded
+-----------------
 
 **caffeine-reloaded** is an almost complete rewrite of lp:caffeine_
 It was created in an effort to tidy up the code, increase stability,
