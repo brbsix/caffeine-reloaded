@@ -1,6 +1,3 @@
-dist: trusty
-sudo: required
-
 language:
   - python
 
@@ -12,9 +9,15 @@ python:
   - "3.5-dev" # 3.5 development branch
   - "nightly" # currently points to 3.6-dev
 
-before_install:
-  - sudo apt-get update -qq
-  - sudo apt-get install --no-install-recommends -y debhelper devscripts libdistro-info-perl libparse-debcontrol-perl python3-all python3-setuptools
+addons:
+  apt:
+    packages:
+    - debhelper
+    - devscripts
+    - libdistro-info-perl
+    - libparse-debcontrol-perl
+    - python3-all
+    - python3-setuptools
 
 script:
   - make deb
