@@ -57,7 +57,9 @@ class Caffeine(GObject.GObject):
             args = ['caffeine'] + (
                 ['--quiet'] if OPTIONS.quiet else ['--align'] +
                 (['--timestamp'] if OPTIONS.timestamp else []))
-            self.process = Popen(args)
+            # start_new_session ensures the child process (caffeine)
+            # does not receive signals sent to the parent process
+            self.process = Popen(args, start_new_session=True)
             self.status_string = _('started caffeine [%s]' % self.process.pid)
         else:
             call(['caffeine-screensaver', 'suspend', self.root_id])
