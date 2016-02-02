@@ -233,7 +233,7 @@ PARSER.add_argument(
 PARSER.add_argument(
     '-V', '--version',
     action='version',
-    version=__program__ + ' ' + __version__)
+    version='%(prog)s ' + __version__)
 
 OPTIONS = PARSER.parse_args()
 
