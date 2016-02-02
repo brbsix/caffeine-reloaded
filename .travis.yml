@@ -14,8 +14,8 @@ python:
   - "nightly" # currently points to 3.6-dev
 
 before_install:
-  - sudo apt-get update
-  - sudo apt-get install --no-install-recommends -y debhelper devscripts libdistro-info-perl libparse-debcontrol-perl python3-all python3-setuptools
+  - travis_retry sudo apt-get update
+  - travis_retry sudo apt-get install --no-install-recommends -y debhelper devscripts libdistro-info-perl libparse-debcontrol-perl python3-all python3-setuptools
 
 script:
   - make deb
