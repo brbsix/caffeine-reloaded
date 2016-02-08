@@ -55,8 +55,7 @@ class Caffeine(GObject.GObject):
 
         if OPTIONS.auto_toggle:
             args = ['caffeine'] + (
-                ['--quiet'] if OPTIONS.quiet else ['--align'] +
-                (['--timestamp'] if OPTIONS.timestamp else []))
+                ['--quiet'] if OPTIONS.quiet else ['--align'])
             # start_new_session ensures the child process (caffeine)
             # does not receive signals sent to the parent process
             self.process = Popen(args, start_new_session=True)
@@ -229,7 +228,7 @@ PARSER.add_argument(
     '-t', '--timestamp',
     action='store_true',
     dest='timestamp',
-    help='timestamp log entries')
+    help=argparse.SUPPRESS)
 PARSER.add_argument(
     '-V', '--version',
     action='version',
@@ -238,16 +237,11 @@ PARSER.add_argument(
 OPTIONS = PARSER.parse_args()
 
 # set up logging
-STR = '(%(name)s) %(levelname)s: %(message)s'
-
-if OPTIONS.timestamp:
-    FMT = ['%(asctime)s.%(msecs)03d ' + STR, '%Y-%m-%d %H:%M:%S']
-else:
-    FMT = [STR]
-
 LOGGER = logging.getLogger(__program__)
 STREAM = logging.StreamHandler()
-FORMAT = logging.Formatter(*FMT)
+FORMAT = logging.Formatter(
+    '%(asctime)s.%(msecs)03d (%(name)s) %(levelname)s: %(message)s',
+    '%Y-%m-%d %H:%M:%S')
 STREAM.setFormatter(FORMAT)
 LOGGER.addHandler(STREAM)
 

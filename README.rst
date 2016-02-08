@@ -87,7 +87,6 @@ active window is fullscreen.
 
   optional arguments:
     -q, --quiet      suppress normal output
-    -t, --timestamp  timestamp log entries
     -V, --version    show program's version number and exit
 
 **caffeine-indicator** is a GUI status bar indicator that can be used to
@@ -103,7 +102,6 @@ active window is fullscreen.
   optional arguments:
     -a, --auto       prevent desktop idleness in fullscreen mode
     -q, --quiet      suppress normal output
-    -t, --timestamp  timestamp log entries
     -V, --version    show program's version number and exit
 
 

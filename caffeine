@@ -183,7 +183,7 @@ PARSER.add_argument(
     '-t', '--timestamp',
     action='store_true',
     dest='timestamp',
-    help='timestamp log entries')
+    help=argparse.SUPPRESS)
 PARSER.add_argument(
     '-V', '--version',
     action='version',
@@ -192,17 +192,13 @@ PARSER.add_argument(
 OPTIONS = PARSER.parse_args()
 
 # set up logging
-SPACES = ' ' * (11 if OPTIONS.align else 1)
-STR = '(%(name)s)' + SPACES + '%(levelname)s: %(message)s'
-
-if OPTIONS.timestamp:
-    FMT = ['%(asctime)s.%(msecs)03d ' + STR, '%Y-%m-%d %H:%M:%S']
-else:
-    FMT = [STR]
-
 LOGGER = logging.getLogger(__program__)
 STREAM = logging.StreamHandler()
-FORMAT = logging.Formatter(*FMT)
+FORMAT = logging.Formatter(
+    '%(asctime)s.%(msecs)03d (%(name)s)' +
+    ' ' * (11 if OPTIONS.align else 1) +
+    '%(levelname)s: %(message)s',
+    '%Y-%m-%d %H:%M:%S')
 STREAM.setFormatter(FORMAT)
 LOGGER.addHandler(STREAM)
 
