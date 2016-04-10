@@ -58,7 +58,7 @@ else
     exit 0
 fi
 
-TEMP_DIRECTORY=$(mktemp --directory /tmp/caffeine.XXXXXXXXXX)
+TEMP_DIRECTORY=$(mktemp --directory --tmpdir caffeine.XXXXXX)
 
 [[ -d $TEMP_DIRECTORY ]] || {
     error "Failed to create temp directory"
