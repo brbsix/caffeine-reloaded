@@ -47,27 +47,6 @@ To install with :code:`gdebi-gtk`:
   gdebi-gtk ./caffeine-reloaded_0.0.3_all.deb
 
 
-Development
-===========
-
-To create a new release, ensure build dependencies are installed:
-
-::
-
-  sudo apt-get install --no-install-recommends build-essential debhelper devscripts libdistro-info-perl libparse-debcontrol-perl python3-all python3-setuptools
-
-Then run the following:
-
-1. Bump version and increment changelog with :code:`./bump-version.sh`
-2. Commit the changes
-3. Build the *.deb* with :code:`make deb`
-4. Tag the release (e.g. :code:`git tag v0.0.1`)
-5. Push the release (e.g. :code:`git push origin master v0.0.1` or :code:`git push origin master --tags`)
-6. Attach the *.deb* package to the release via GitHub's web interface (this keeps builds out of the repo history)
-
-If :code:`debuild` reports missing build dependencies, install them and retry :code:`make deb`.
-
-
 Usage
 =====
 
@@ -103,6 +82,27 @@ active window is fullscreen.
     -a, --auto       prevent desktop idleness in fullscreen mode
     -q, --quiet      suppress normal output
     -V, --version    show program's version number and exit
+
+
+Development
+===========
+
+To create a new release, ensure build dependencies are installed:
+
+::
+
+  sudo apt-get install --no-install-recommends build-essential debhelper devscripts libdistro-info-perl libparse-debcontrol-perl python3-all python3-setuptools
+
+Then run the following:
+
+1. Bump version and increment changelog with :code:`./bump-version.sh`
+2. Commit the changes
+3. Build the *.deb* with :code:`make deb`
+4. Tag the release (e.g. :code:`git tag v0.0.1`)
+5. Push the release (e.g. :code:`git push origin master v0.0.1` or :code:`git push origin master --tags`)
+6. Attach the *.deb* package to the release via GitHub's web interface (this keeps builds out of the repo history)
+
+If :code:`debuild` reports missing build dependencies, install them and retry :code:`make deb`.
 
 
 Translations
